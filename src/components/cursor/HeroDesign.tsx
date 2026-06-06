@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const assets = {
   product: "/assets/cursor-hero/product.png",
   logo: "/assets/cursor-hero/logo.svg",
@@ -20,9 +22,11 @@ const assets = {
 function PrimaryButton({
   children,
   size = "hero",
+  showIcon = true,
 }: {
   children: React.ReactNode;
   size?: "hero" | "nav";
+  showIcon?: boolean;
 }) {
   const isNav = size === "nav";
 
@@ -35,12 +39,81 @@ function PrimaryButton({
           : "px-[18px] py-[11px] text-[16px] font-medium tracking-[-0.32px] text-white"
       }`}
     >
-      <img src={assets.shopifyIcon} alt="" className="h-[18px] w-4" />
+      {showIcon && (
+        <img src={assets.shopifyIcon} alt="" className="h-[18px] w-4" />
+      )}
       {children}
       <span className="pointer-events-none absolute inset-0 rounded-[inherit] shadow-[inset_0px_1px_1px_0px_rgba(255,255,255,0.4),inset_0px_-4px_2px_0px_rgba(235,70,48,0.4)]" />
     </button>
   );
 }
+
+function OutlineButton({ children }: { children: React.ReactNode }) {
+  return (
+    <button
+      type="button"
+      className="w-full rounded-[14px] border border-black/10 bg-white px-6 py-3.5 text-[15px] font-medium tracking-[-0.3px] text-[#402926] transition-colors hover:bg-[#fff7f6]"
+    >
+      {children}
+    </button>
+  );
+}
+
+function DarkButton({ children }: { children: React.ReactNode }) {
+  return (
+    <button
+      type="button"
+      className="w-full rounded-[14px] bg-[#402926] px-6 py-3.5 text-[15px] font-medium tracking-[-0.3px] text-white transition-colors hover:bg-[#2d1c1a]"
+    >
+      {children}
+    </button>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 14 14"
+      fill="none"
+      className="mt-0.5 shrink-0"
+      aria-hidden
+    >
+      <path
+        d="M2.5 7L5.5 10L11.5 4"
+        stroke="#402926"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function SectionHeading({
+  title,
+  subtitle,
+}: {
+  title: string;
+  subtitle?: string;
+}) {
+  return (
+    <div className="mx-auto mb-14 flex max-w-[640px] flex-col items-center gap-4 text-center">
+      <h2 className="text-3xl font-semibold tracking-[-1.5px] text-[#402926] sm:text-4xl lg:text-[42px] lg:leading-[1.1] lg:tracking-[-2px]">
+        {title}
+      </h2>
+      {subtitle && (
+        <p className="text-base font-medium leading-relaxed text-[rgba(64,41,38,0.65)] sm:text-lg">
+          {subtitle}
+        </p>
+      )}
+    </div>
+  );
+}
+
+const CARD_SHADOW =
+  "shadow-[0px_42px_26px_0px_rgba(255,94,73,0.05),0px_18px_18px_0px_rgba(255,94,73,0.09),0px_5px_10px_0px_rgba(255,94,73,0.1),0px_8px_8px_0px_rgba(11,32,103,0.05)]";
 
 function SecondaryButton({ children }: { children: React.ReactNode }) {
   return (
@@ -329,22 +402,290 @@ function HeroIllustration() {
   );
 }
 
-function PlaceholderSection({
-  title,
-  children,
-  className = "bg-white",
-}: {
-  title: string;
-  children: React.ReactNode;
-  className?: string;
-}) {
+function HowItWorksSection() {
+  const steps = [
+    {
+      step: "01",
+      heading: "Install the app",
+      body: "Add Customizer to your Shopify store in one click. No code required.",
+    },
+    {
+      step: "02",
+      heading: "Set your rules",
+      body: "Choose which order fields customers can edit and how long they have to make changes.",
+    },
+    {
+      step: "03",
+      heading: "Reduce support load",
+      body: "Customers self-serve edits while you focus on growing your business.",
+    },
+  ];
+
   return (
-    <section className={`px-6 py-20 lg:px-12 ${className}`}>
-      <div className="mx-auto max-w-5xl">
-        <h2 className="mb-10 text-center text-3xl font-semibold tracking-tight text-[#402926]">
-          {title}
-        </h2>
-        {children}
+    <section className="relative bg-gradient-to-b from-[#fce1df] to-[rgba(255,247,246,0.6)] px-6 py-24 lg:px-12">
+      <div className="mx-auto max-w-6xl">
+        <SectionHeading
+          title="How It Works"
+          subtitle="Three simple steps to give your customers control and cut support tickets."
+        />
+        <div className="grid gap-6 md:grid-cols-3">
+          {steps.map((item) => (
+            <div
+              key={item.step}
+              className={`flex flex-col rounded-[28px] bg-white p-8 ${CARD_SHADOW}`}
+            >
+              <span className="inline-flex w-fit rounded-[10.5px] bg-[#ff7a68] px-3 py-1 text-[13px] font-medium text-white shadow-[0px_7px_18px_0px_rgba(255,94,73,0.45)]">
+                {item.step}
+              </span>
+              <h3 className="mt-5 text-xl font-semibold tracking-[-0.5px] text-[#402926]">
+                {item.heading}
+              </h3>
+              <p className="mt-3 text-[15px] font-medium leading-relaxed text-[rgba(64,41,38,0.7)]">
+                {item.body}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TestimonialsSection() {
+  const quotes = [
+    {
+      quote:
+        "Cut our order-edit support tickets by 40% in the first month.",
+      name: "Sarah M.",
+      store: "Bloom & Co.",
+    },
+    {
+      quote:
+        "Customers love being able to fix their address without emailing us.",
+      name: "James T.",
+      store: "Urban Goods",
+    },
+    {
+      quote:
+        "Setup took five minutes. The AOV bump was a nice surprise.",
+      name: "Priya K.",
+      store: "Luxe Skincare",
+    },
+    {
+      quote:
+        "Finally, a post-purchase experience that actually works.",
+      name: "Marcus L.",
+      store: "Peak Outdoors",
+    },
+  ];
+
+  return (
+    <section className="relative bg-gradient-to-b from-[rgba(255,247,246,0.6)] to-[#fff7f6] px-6 py-24 lg:px-12">
+      <div className="mx-auto max-w-6xl">
+        <SectionHeading
+          title="What Merchants Say"
+          subtitle="Real results from Shopify stores using Customizer every day."
+        />
+        <div className="grid gap-6 md:grid-cols-2">
+          {quotes.map((item) => (
+            <blockquote
+              key={item.quote}
+              className={`rounded-[28px] bg-white p-8 ${CARD_SHADOW}`}
+            >
+              <p className="text-[17px] font-medium leading-relaxed tracking-[-0.2px] text-[#402926]">
+                &ldquo;{item.quote}&rdquo;
+              </p>
+              <footer className="mt-6 flex items-center gap-3">
+                <div className="flex size-9 items-center justify-center rounded-full bg-[#ffe9e6] text-sm font-semibold text-[#ff5e49]">
+                  {item.name.charAt(0)}
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-[#402926]">
+                    {item.name}
+                  </p>
+                  <p className="text-[13px] text-[rgba(64,41,38,0.55)]">
+                    {item.store}
+                  </p>
+                </div>
+              </footer>
+            </blockquote>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PricingSection() {
+  const [billing, setBilling] = useState<"monthly" | "quarterly">("monthly");
+
+  const plans = [
+    {
+      id: "starter",
+      badge: "Starter",
+      badgeStyle: "bg-[#ff7a68] text-white",
+      description:
+        "Perfect for small stores getting started with self-serve order edits.",
+      monthlyPrice: 29,
+      features: [
+        "Up to 500 orders/month",
+        "Address & quantity edits",
+        "30-minute edit window",
+        "Email notifications",
+        "Basic dashboard",
+      ],
+      cta: "Get started",
+      ctaVariant: "outline" as const,
+      highlighted: false,
+    },
+    {
+      id: "pro",
+      badge: "Pro",
+      badgeStyle: "bg-[#ff7a68] text-white",
+      description:
+        "For growing brands that need more flexibility and faster turnaround.",
+      monthlyPrice: 79,
+      features: [
+        "Unlimited orders",
+        "All edit types included",
+        "Custom edit time windows",
+        "Slack & dashboard updates",
+        "Priority support",
+        "AOV optimization tools",
+      ],
+      cta: "Get started",
+      ctaVariant: "outline" as const,
+      highlighted: false,
+    },
+    {
+      id: "custom",
+      badge: "Custom",
+      badgeStyle: "bg-white text-[#402926]",
+      description:
+        "For high-volume stores with advanced workflows and dedicated needs.",
+      monthlyPrice: null,
+      features: [
+        "Everything in Pro",
+        "Multi-store management",
+        "Custom development",
+        "Dedicated account manager",
+        "SLA & priority support",
+        "Advanced analytics",
+      ],
+      cta: "Book a Call",
+      ctaVariant: "dark" as const,
+      highlighted: true,
+    },
+  ];
+
+  const formatPrice = (monthly: number) => {
+    const price =
+      billing === "quarterly" ? Math.round(monthly * 0.9) : monthly;
+    return price;
+  };
+
+  return (
+    <section className="relative bg-gradient-to-b from-[#fff7f6] via-[rgba(255,237,233,0.5)] to-[#fce1df] px-6 py-24 lg:px-12">
+      <div className="mx-auto max-w-6xl">
+        <SectionHeading
+          title="Choose your right plan!"
+          subtitle="Select from best plans, ensuring a perfect match. Need more or less? Customize your subscription for a seamless fit!"
+        />
+
+        <div className="mb-12 flex justify-center">
+          <div className="inline-flex rounded-full bg-white p-1.5 shadow-[0px_5px_10px_0px_rgba(255,94,73,0.08)]">
+            <button
+              type="button"
+              onClick={() => setBilling("monthly")}
+              className={`rounded-full px-6 py-2.5 text-[14px] font-medium tracking-[-0.14px] transition-colors ${
+                billing === "monthly"
+                  ? "bg-[#ff7a68] text-white shadow-[0px_4px_12px_0px_rgba(255,94,73,0.35)]"
+                  : "text-[rgba(64,41,38,0.6)]"
+              }`}
+            >
+              Monthly
+            </button>
+            <button
+              type="button"
+              onClick={() => setBilling("quarterly")}
+              className={`rounded-full px-6 py-2.5 text-[14px] font-medium tracking-[-0.14px] transition-colors ${
+                billing === "quarterly"
+                  ? "bg-[#ff7a68] text-white shadow-[0px_4px_12px_0px_rgba(255,94,73,0.35)]"
+                  : "text-[rgba(64,41,38,0.6)]"
+              }`}
+            >
+              Quarterly{" "}
+              <span className={billing === "quarterly" ? "text-white/85" : ""}>
+                (save 10%)
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div className="grid gap-6 lg:grid-cols-3">
+          {plans.map((plan) => (
+            <div
+              key={plan.id}
+              className={`flex flex-col rounded-[24px] p-8 ${
+                plan.highlighted
+                  ? "bg-gradient-to-br from-[#ffd4cc] via-[#ffe9e6] to-[#fff0ee]"
+                  : `bg-white ${CARD_SHADOW}`
+              }`}
+            >
+              <span
+                className={`inline-flex w-fit rounded-lg px-3 py-1 text-[13px] font-semibold ${plan.badgeStyle}`}
+              >
+                {plan.badge}
+              </span>
+
+              <p className="mt-5 text-[14px] font-medium leading-relaxed text-[rgba(64,41,38,0.65)]">
+                {plan.description}
+              </p>
+
+              <div className="mt-6 mb-8">
+                {plan.monthlyPrice !== null ? (
+                  <p className="flex items-baseline gap-1">
+                    <span className="text-[42px] font-semibold tracking-[-2px] text-[#402926]">
+                      ${formatPrice(plan.monthlyPrice)}
+                    </span>
+                    <span className="text-[15px] font-medium text-[rgba(64,41,38,0.5)]">
+                      /month
+                    </span>
+                  </p>
+                ) : (
+                  <p className="text-[32px] font-semibold tracking-[-1.5px] text-[#402926]">
+                    Let&apos;s Talk!
+                  </p>
+                )}
+              </div>
+
+              <ul className="mb-8 flex flex-1 flex-col gap-3.5">
+                {plan.features.map((feature) => (
+                  <li
+                    key={feature}
+                    className="flex items-start gap-2.5 text-[14px] font-medium text-[#402926]"
+                  >
+                    <CheckIcon />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+
+              {plan.ctaVariant === "outline" ? (
+                <OutlineButton>{plan.cta}</OutlineButton>
+              ) : (
+                <DarkButton>{plan.cta}</DarkButton>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-14 flex flex-col items-center gap-3 text-center">
+          <p className="text-[15px] font-medium text-[rgba(64,41,38,0.6)]">
+            14-day free trial on all plans · Cancel anytime
+          </p>
+          <PrimaryButton showIcon={false}>Start Free Trial</PrimaryButton>
+        </div>
       </div>
     </section>
   );
@@ -405,78 +746,9 @@ export function HeroDesign() {
         </div>
       </section>
 
-      {/* Placeholder content below */}
-      <PlaceholderSection title="How It Works">
-        <div className="grid gap-8 md:grid-cols-3">
-          {[
-            {
-              step: "01",
-              heading: "Install the app",
-              body: "Add Customizer to your Shopify store in one click. No code required.",
-            },
-            {
-              step: "02",
-              heading: "Set your rules",
-              body: "Choose which order fields customers can edit and how long they have to make changes.",
-            },
-            {
-              step: "03",
-              heading: "Reduce support load",
-              body: "Customers self-serve edits while you focus on growing your business.",
-            },
-          ].map((item) => (
-            <div
-              key={item.step}
-              className="rounded-2xl border border-[#fce1df] bg-[#fff7f6] p-8"
-            >
-              <span className="text-sm font-semibold text-[#ff5e49]">
-                {item.step}
-              </span>
-              <h3 className="mt-3 text-xl font-semibold text-[#402926]">
-                {item.heading}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-[rgba(64,41,38,0.7)]">
-                {item.body}
-              </p>
-            </div>
-          ))}
-        </div>
-      </PlaceholderSection>
-
-      <PlaceholderSection title="What Merchants Say" className="bg-[#fff7f6]">
-        <div className="grid gap-6 md:grid-cols-2">
-          {[
-            "Cut our order-edit support tickets by 40% in the first month.",
-            "Customers love being able to fix their address without emailing us.",
-            "Setup took five minutes. The AOV bump was a nice surprise.",
-            "Finally, a post-purchase experience that actually works.",
-          ].map((quote) => (
-            <blockquote
-              key={quote}
-              className="rounded-2xl bg-white p-6 text-[#402926] shadow-sm"
-            >
-              <p className="text-base leading-relaxed">&ldquo;{quote}&rdquo;</p>
-              <footer className="mt-4 text-sm text-black/50">
-                — Shopify merchant
-              </footer>
-            </blockquote>
-          ))}
-        </div>
-      </PlaceholderSection>
-
-      <PlaceholderSection title="Simple Pricing">
-        <div className="mx-auto max-w-md rounded-3xl border border-[#fce1df] bg-[#fff7f6] p-10 text-center">
-          <p className="text-5xl font-semibold text-[#402926]">
-            $29<span className="text-lg font-medium text-black/50">/mo</span>
-          </p>
-          <p className="mt-2 text-sm text-black/50">
-            14-day free trial · Cancel anytime
-          </p>
-          <div className="mt-8">
-            <PrimaryButton>Start Free Trial</PrimaryButton>
-          </div>
-        </div>
-      </PlaceholderSection>
+      <HowItWorksSection />
+      <TestimonialsSection />
+      <PricingSection />
 
       <footer className="border-t border-[#fce1df] bg-white px-6 py-12 text-center text-sm text-black/50">
         <img src={assets.logo} alt="Logo" className="mx-auto mb-4 h-6 w-12 opacity-60" />
