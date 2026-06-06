@@ -1,24 +1,26 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
-  --color-brand: #0070f3;
-  --color-surface: #0d0d0d;
+  --font-sans: "Geist", "Inter", system-ui, sans-serif;
+  --color-brand: #ff5e49;
+  --color-surface: #fce1df;
   --color-card: #333333;
 }
 
 html {
   scroll-behavior: smooth;
+  overflow-y: auto;
 }
 
 body {
   margin: 0;
   font-family: var(--font-sans);
-  background-color: var(--color-surface);
-  color: white;
+  background-color: #ffffff;
+  color: #402926;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 #root {
-  min-height: 100svh;
+  width: 100%;
 }

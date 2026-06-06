@@ -1,7 +1,7 @@
-import { Level1 } from "./components/Level1";
+import { HeroDesign } from "./components/cursor/HeroDesign";
 
 function App() {
-  return <Level1 />;
+  return <HeroDesign />;
 }
 
 export default App;
